@@ -30,6 +30,9 @@ navbar:
   - text: Index
     href: index.html
   - text: About
-    href: about.html
-
+    href: About.html
+output:
+  html_document:
+    lib_dir: site_libs
+    self_contained: no
 
