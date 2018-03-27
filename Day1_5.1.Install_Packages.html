@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Adapted from Software Carpentry; modified by Maina,Stephanie" />
+
+
+<title>5.1. Install Packages</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R Macquarie Course</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Introduction</a>
+</li>
+<li>
+  <a href="About.html">About</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">5.1. Install Packages</h1>
+<h4 class="author"><em>Adapted from Software Carpentry; modified by Maina,Stephanie</em></h4>
+<h4 class="date"><em>13th of March 2018</em></h4>
+
+</div>
+
+
+<div id="installing-and-managing-packages" class="section level2">
+<h2>Installing and managing packages</h2>
+<p><strong>LISTS OF PACKAGES</strong></p>
+<pre class="r"><code>browseURL(&quot;http://cran.r-project.org/web/views/&quot;)  # Opens CRAN Task Views in browser</code></pre>
+<p>Opens “Available CRAN Packages By Name” (from UCLA mirror) in browser</p>
+<pre class="r"><code>browseURL(&quot;http://cran.stat.ucla.edu/web/packages/available_packages_by_name.html&quot;)</code></pre>
+<p>See also CRANtastic</p>
+<pre class="r"><code>browseURL(&quot;http://crantastic.org/&quot;)</code></pre>
+<ul>
+<li><strong>See current packages</strong></li>
+</ul>
+<pre class="r"><code>library()  # Brings up editor list of installed packages
+search()   # Shows packages that are currently loaded</code></pre>
+</div>
+<div id="to-install-and-use-packages" class="section level2">
+<h2>To install and use packages</h2>
+<p>Can use menus: + Tools &gt; Install Packages… (or use Package window) + Or can use scripts, which can be saved in incorporated in source</p>
+<pre class="r"><code>install.packages(&quot;ggplot2&quot;)  # Downloads package from CRAN and installs in R
+?install.packages</code></pre>
+<pre class="r"><code>library(&quot;ggplot2&quot;)  # Make package available; often used for loading in scripts
+require(&quot;ggplot2&quot;)  # Preferred for loading in functions; maybe better?
+library(help = &quot;ggplot2&quot;)  # Brings up documentation in editor window</code></pre>
+<ul>
+<li><strong>UPDATE PACKAGES</strong> In RStudio, Tools &gt; Check for Package Updates</li>
+</ul>
+<pre class="r"><code>update.packages()  # Checks for updates; do periodically
+?update.packages</code></pre>
+<ul>
+<li><strong>UNLOAD/REMOVE PACKAGES</strong></li>
+</ul>
+<p>By default, all loaded packages are unloaded when R quits Can also open Packages window and manually uncheck or can use this code to unload packages</p>
+<pre class="r"><code>detach(&quot;package:ggplot2&quot;, unload = TRUE)
+?detach</code></pre>
+<ul>
+<li><strong>To permanently remove (delete) package</strong></li>
+</ul>
+<pre class="r"><code>install.packages(&quot;psytabs&quot;)  # Adds psytabs
+remove.packages(&quot;psytabs&quot;)   # Deletes it
+?remove.packages</code></pre>
+</div>
+<div id="getting-help-with-r" class="section level2">
+<h2>Getting help with R</h2>
+<p>This is a summary of the information you can find here <a href="https://www.r-project.org/help.html" class="uri">https://www.r-project.org/help.html</a></p>
+<div id="r-help-help-and" class="section level4">
+<h4>R Help: ‘help()’ and ‘?’</h4>
+<p>The ‘help()’ function and ‘?’ help operator in R provide access to the documentation pages for <strong>R functions, data sets, and other objects</strong>, both for packages in the standard R distribution and for contributed packages. For example, to access documentation for the standard mean function, for example, enter the command:‘help(mean)’ or ‘help(“mean”)’, or ‘?mean’ or ‘?“mean”’ (the quotes are optional).</p>
+<p>You may also use the ‘help()’ function to access information about a <strong>package</strong> in your library - for example:</p>
+<pre class="r"><code>help(package=&quot;MASS&quot;)</code></pre>
+<p>which displays an index of available help pages for the package along with some other information.</p>
+<p>Help pages for functions usually include a section with executable examples illustrating how the functions work. You can execute these examples in the current R session via the ‘example()’</p>
+<pre class="r"><code>example(mean)</code></pre>
+</div>
+<div id="searching-for-help-within-r" class="section level4">
+<h4>Searching for Help Within R</h4>
+<p>The ‘help()’ function and ‘?’ operator are useful only if you already know the name of the function that you wish to use. There are also facilities in the standard R distribution for discovering functions and other objects. The following functions cast a progressively wider net. Use the help system to obtain complete documentation for these functions: for example, <code>apropos()</code> or <code>?apropos</code>.</p>
+<p>The <code>apropos()</code> function searches for objects, including functions, directly accessible in the current R session that have names that include a specified character string. This may be a literal string or a regular expression to be used for pattern-matching. By default, string matching by ‘apropos()’ is case-insensitive. For example,</p>
+<pre class="r"><code>apropos(&quot;^glm&quot;) </code></pre>
+<p>returns the names of all accessible objects that start with the (case-insensitive) characters “glm”</p>
+</div>
+<div id="r-help-on-the-internet" class="section level4">
+<h4>R Help on the internet</h4>
+<p>There are internet search sites that are specialized for R searches including ‘search.r-project.org’ (which is the site used by RSiteSearch) and <code>Rseek.org</code>.</p>
+<p>It is also possible to use a general search site like <strong>Google</strong>, by qualifying the search with “R” or the name of an R package (or both). <strong>It can be particularly helpful to paste an error message into a search engine</strong> to find out whether others have solved a problem that you encountered.</p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

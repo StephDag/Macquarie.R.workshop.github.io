@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Adapted from Software Carpentry; modified by Maina,Stephanie" />
+
+
+<title>3.2. Loading and manipulating data</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R Macquarie Course</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Introduction</a>
+</li>
+<li>
+  <a href="About.html">About</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">3.2. Loading and manipulating data</h1>
+<h4 class="author"><em>Adapted from Software Carpentry; modified by Maina,Stephanie</em></h4>
+<h4 class="date"><em>13th of March 2018</em></h4>
+
+</div>
+
+
+<pre class="r"><code>opts_chunk$set(echo = TRUE, cache=FALSE)
+read_chunk(&#39;/Users/stephdagata/Documents/GitHub/MQE-WORKSHOP-R-2018b/Scripts/Day 1/Day1_3.2.Loading_and_manipulating_data.R&#39;)</code></pre>
+<div id="reading-in-data" class="section level1">
+<h1>1. Reading in data</h1>
+<p>As empirical biologists/ecologists, you’ll generally have data to read in. You probably have your data in an Excel spreadsheet. The simplest way to load these into R is to save a copy of the data as a comma separated values file (.csv) and work with that.</p>
+<p>It is actually possible to read directly from Excel (but see the <code>gdata package</code> that has a <code>read.xls</code> function, and see this page for other alternatives. This is usually more hassle than it’s worth, and going through a comma separated file is easy enough.</p>
+<p>To load the data into R, use <strong>seed_root_herbivores.csv</strong></p>
+<div id="get-the-files-names" class="section level3">
+<h3>Get the files names</h3>
+<p>You can check first if the data are in the directory:</p>
+<pre class="r"><code>file.exists(&quot;data/seed_root_herbivores.csv&quot;)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<p>if <code>TRUE</code>, load the data in the object <code>data</code>:</p>
+<pre class="r"><code>data&lt;-read.csv(&quot;data/seed_root_herbivores.csv&quot;)</code></pre>
+<p>This doesn’t usually produce any output - the data is “just there” now.</p>
+<p>Clicking the little table icon next to the data in the Workspace browser will view the data. Running <code>View(data)</code> will do the same thing.</p>
+<p>The <code>data</code> variable contains <code>data.frame</code> object. It is a number of columns of the same length, arranged like a matrix. That sentence is tricky, for reasons that will become apparent.</p>
+<p>Often, looking at the first few rows is all you need to remind yourself about what is in a data set.</p>
+<pre class="r"><code>head(data) # looking at the first 6 lines of the data</code></pre>
+<pre><code>##     Plot Seed.herbivore Root.herbivore No.stems Height Weight Seed.heads
+## 1 plot-2           TRUE           TRUE        1     31   4.16         83
+## 2 plot-2           TRUE           TRUE        3     41   5.82        175
+## 3 plot-2           TRUE           TRUE        1     42   3.51         72
+## 4 plot-2           TRUE          FALSE        1     64   7.16        125
+## 5 plot-2           TRUE          FALSE        1     47   6.17        212
+## 6 plot-2           TRUE          FALSE        1     52   5.32        114
+##   Seeds.in.25.heads
+## 1                 7
+## 2                 0
+## 3                32
+## 4                22
+## 5                 3
+## 6                19</code></pre>
+<p>You can also look at the class of the object <code>data</code>:</p>
+<pre class="r"><code>class(data)</code></pre>
+<pre><code>## [1] &quot;data.frame&quot;</code></pre>
+<p>You can get a vector of names of columns:</p>
+<pre class="r"><code>names(data)</code></pre>
+<pre><code>## [1] &quot;Plot&quot;              &quot;Seed.herbivore&quot;    &quot;Root.herbivore&quot;   
+## [4] &quot;No.stems&quot;          &quot;Height&quot;            &quot;Weight&quot;           
+## [7] &quot;Seed.heads&quot;        &quot;Seeds.in.25.heads&quot;</code></pre>
+<p>You can get the number of rows:</p>
+<pre class="r"><code>nrow(data)</code></pre>
+<pre><code>## [1] 169</code></pre>
+<p>and the number of columns</p>
+<pre class="r"><code>ncol(data)</code></pre>
+<pre><code>## [1] 8</code></pre>
+<pre class="r"><code>length(data)</code></pre>
+<pre><code>## [1] 8</code></pre>
+<p>The last one is surprising to most people. There is a logical (if not good) reason for this, which we will get to later.</p>
+<p>Aside from issues around factors and character vectors (that we’ll cover shortly), this is most of what you need to know about loading data.</p>
+<p>However, it’s useful to know things about saving it.</p>
+<ul>
+<li><p>Column names should be consistent, of the right length, and <strong>contain no special characters</strong>.</p></li>
+<li><p><strong>For missing values, either leave them blank or use NA</strong>. But be consistent and don’t use -999 or ? or your cat’s name.</p></li>
+<li><p>Be careful with whitespace “x” will be treated differently to “x”, and Excel makes it easy to accidently do the latter. Consider the strip.white=TRUE argument to read.csv.</p></li>
+<li><p>Think about the type of the data. We’ll cover this more, but are you dealing with a TRUE/FALSE or a category or a count or measurements.</p></li>
+<li><p>Watch out for dashes between numbers. Excel will convert these into dates. So if you have “Site-Plant” style numbers 5-20 will get converted into the 20th of May 1904 or something equally useless. Similar problems happen to gene names in bioinformatics!</p></li>
+<li><p>Merged rows and columns will not work (or at least not in an easily predictible way.</p></li>
+<li><p>Spare rows at the top, or double header rows will not work without jumping through hoops.</p></li>
+<li><p>Equations will (should) convert to the value displayed in Excel on export.</p></li>
+</ul>
+</div>
+<div id="exercise" class="section level3">
+<h3>Exercise</h3>
+<p>The file <code>data/seed_root_herbivores.txt</code> has almost the same data, but in tab separated format (it does have the same number of rows and columns). Look at the ?read.table help page and work out how to load this file in.</p>
+<p>Remember: <code>==</code> tests for equality, <code>!=</code> tests for inequality</p>
+<pre class="r"><code>data2=read.table(&quot;data/seed_root_herbivores.txt&quot;,header=T,sep=&quot;;&quot;)</code></pre>
+<pre class="r"><code>data2==data</code></pre>
+<p>or</p>
+<pre class="r"><code>data2 != data</code></pre>
+<p>The point here is that many of the functions and operators in R will try to do the right thing, depending on what you give them.</p>
+<p>This won’t work, because the default arguments of read.table and read.csv are different for the header.</p>
+<pre class="r"><code>tmp&lt;-read.table(&quot;data/seed_root_herbivores.txt&quot;,sep=&quot;;&quot;)</code></pre>
+<pre class="r"><code>head(tmp)</code></pre>
+<pre><code>##       V1             V2             V3       V4     V5     V6         V7
+## 1   Plot Seed.herbivore Root.herbivore No.stems Height Weight Seed.heads
+## 2 plot-2           TRUE           TRUE        1     31   4.16         83
+## 3 plot-2           TRUE           TRUE        3     41   5.82        175
+## 4 plot-2           TRUE           TRUE        1     42   3.51         72
+## 5 plot-2           TRUE          FALSE        1     64   7.16        125
+## 6 plot-2           TRUE          FALSE        1     47   6.17        212
+##                  V8
+## 1 Seeds.in.25.heads
+## 2                 7
+## 3                 0
+## 4                32
+## 5                22
+## 6                 3</code></pre>
+<p>Notice that a fake header (V1, V2, etc) has been created and the actual header is now the first row of data.</p>
+</div>
+</div>
+<div id="looking-at-your-data" class="section level1">
+<h1>2. Looking at your data</h1>
+<p>There are other ways of looking at your data. The summary function works with most types, and gives a by-column summary of the data set.</p>
+<pre class="r"><code>summary(data)</code></pre>
+<pre><code>##       Plot     Seed.herbivore  Root.herbivore     No.stems     
+##  plot-40:  9   Mode :logical   Mode :logical   Min.   : 1.000  
+##  plot-20:  8   FALSE:90        FALSE:58        1st Qu.: 1.000  
+##  plot-50:  8   TRUE :79        TRUE :111       Median : 1.000  
+##  plot-60:  8                                   Mean   : 1.982  
+##  plot-16:  7                                   3rd Qu.: 3.000  
+##  plot-30:  7                                   Max.   :10.000  
+##  (Other):122                                                   
+##      Height          Weight        Seed.heads     Seeds.in.25.heads
+##  Min.   :16.00   Min.   : 0.26   Min.   :   3.0   Min.   :  0.00   
+##  1st Qu.:44.00   1st Qu.: 4.08   1st Qu.:  93.0   1st Qu.: 10.00   
+##  Median :54.00   Median : 8.05   Median : 175.0   Median : 19.00   
+##  Mean   :55.54   Mean   :11.20   Mean   : 225.8   Mean   : 22.13   
+##  3rd Qu.:67.00   3rd Qu.:14.77   3rd Qu.: 303.0   3rd Qu.: 32.00   
+##  Max.   :97.00   Max.   :55.51   Max.   :1003.0   Max.   :100.00   
+## </code></pre>
+<div id="subsetting" class="section level3">
+<h3>Subsetting</h3>
+<p>So, we see there is an issue in the file - how to we get to it?</p>
+<p>There a bunch of different ways of extracting bits of your data.</p>
+</div>
+<div id="columns-of-data.frames" class="section level3">
+<h3>Columns of data.frames</h3>
+<p>Get the column <code>Plot</code></p>
+<pre class="r"><code>data$Plot</code></pre>
+<pre><code>##   [1] plot-2  plot-2  plot-2  plot-2  plot-2  plot-2  plot-4  plot-6 
+##   [9] plot-6  plot-6  plot-8  plot-8  plot-8  plot-8  plot-8  plot-10
+##  [17] plot-10 plot-10 plot-10 plot-12 plot-12 plot-12 plot-12 plot-12
+##  [25] plot-14 plot-14 plot-14 plot-14 plot-14 plot-16 plot-16 plot-16
+##  [33] plot-16 plot-16 plot-16 plot-16 plot-18 plot-18 plot-18 plot-18
+##  [41] plot-18 plot-18 plot-20 plot-20 plot-20 plot-20 plot-20 plot-20
+##  [49] plot-20 plot-20 plot-22 plot-22 plot-24 plot-24 plot-24 plot-24
+##  [57] plot-24 plot-24 plot-26 plot-26 plot-26 plot-26 plot-26 plot-26
+##  [65] plot-28 plot-28 plot-28 plot-28 plot-28 plot-28 plot-30 plot-30
+##  [73] plot-30 plot-30 plot-30 plot-30 plot-30 plot-32 plot-32 plot-32
+##  [81] plot-34 plot-34 plot-34 plot-34 plot-36 plot-36 plot-36 plot-36
+##  [89] plot-36 plot-36 plot-36 plot-38 plot-38 plot-38 plot-38 plot-38
+##  [97] plot-40 plot-40 plot-40 plot-40 plot-40 plot-40 plot-40 plot-40
+## [105] plot-40 plot-42 plot-42 plot-44 plot-44 plot-44 plot-44 plot-44
+## [113] plot-44 plot-46 plot-46 plot-46 plot-46 plot-46 plot-46 plot-46
+## [121] plot-48 plot-48 plot-48 plot-48 plot-48 plot-48 plot-50 plot-50
+## [129] plot-50 plot-50 plot-50 plot-50 plot-50 plot-50 plot-52 plot-52
+## [137] plot-52 plot-52 plot-52 plot-52 plot-52 plot-54 plot-54 plot-54
+## [145] plot-54 plot-54 plot-54 plot-54 plot-56 plot-56 plot-56 plot-56
+## [153] plot-56 plot-56 plot-58 plot-58 plot-58 plot-58 plot-58 plot-58
+## [161] plot-58 plot-60 plot-60 plot-60 plot-60 plot-60 plot-60 plot-60
+## [169] plot-60
+## 30 Levels: plot-10 plot-12 plot-14 plot-16 plot-18 plot-2 ... plot-8</code></pre>
+<p>This does <em>almost</em> the same thing:</p>
+<pre class="r"><code>data[[&quot;Plot&quot;]]</code></pre>
+<pre><code>##   [1] plot-2  plot-2  plot-2  plot-2  plot-2  plot-2  plot-4  plot-6 
+##   [9] plot-6  plot-6  plot-8  plot-8  plot-8  plot-8  plot-8  plot-10
+##  [17] plot-10 plot-10 plot-10 plot-12 plot-12 plot-12 plot-12 plot-12
+##  [25] plot-14 plot-14 plot-14 plot-14 plot-14 plot-16 plot-16 plot-16
+##  [33] plot-16 plot-16 plot-16 plot-16 plot-18 plot-18 plot-18 plot-18
+##  [41] plot-18 plot-18 plot-20 plot-20 plot-20 plot-20 plot-20 plot-20
+##  [49] plot-20 plot-20 plot-22 plot-22 plot-24 plot-24 plot-24 plot-24
+##  [57] plot-24 plot-24 plot-26 plot-26 plot-26 plot-26 plot-26 plot-26
+##  [65] plot-28 plot-28 plot-28 plot-28 plot-28 plot-28 plot-30 plot-30
+##  [73] plot-30 plot-30 plot-30 plot-30 plot-30 plot-32 plot-32 plot-32
+##  [81] plot-34 plot-34 plot-34 plot-34 plot-36 plot-36 plot-36 plot-36
+##  [89] plot-36 plot-36 plot-36 plot-38 plot-38 plot-38 plot-38 plot-38
+##  [97] plot-40 plot-40 plot-40 plot-40 plot-40 plot-40 plot-40 plot-40
+## [105] plot-40 plot-42 plot-42 plot-44 plot-44 plot-44 plot-44 plot-44
+## [113] plot-44 plot-46 plot-46 plot-46 plot-46 plot-46 plot-46 plot-46
+## [121] plot-48 plot-48 plot-48 plot-48 plot-48 plot-48 plot-50 plot-50
+## [129] plot-50 plot-50 plot-50 plot-50 plot-50 plot-50 plot-52 plot-52
+## [137] plot-52 plot-52 plot-52 plot-52 plot-52 plot-54 plot-54 plot-54
+## [145] plot-54 plot-54 plot-54 plot-54 plot-56 plot-56 plot-56 plot-56
+## [153] plot-56 plot-56 plot-58 plot-58 plot-58 plot-58 plot-58 plot-58
+## [161] plot-58 plot-60 plot-60 plot-60 plot-60 plot-60 plot-60 plot-60
+## [169] plot-60
+## 30 Levels: plot-10 plot-12 plot-14 plot-16 plot-18 plot-2 ... plot-8</code></pre>
+<p>This is the main difference: if the column name is in a variable, then <code>$</code> won’t work, while <code>[[</code> will. Let’s define a variable <code>v</code> that has the name if the first column as its value:</p>
+<pre class="r"><code>v&lt;-&quot;Plot&quot;</code></pre>
+<p>We can extract this column of the data set using the <code>[[</code> notation:</p>
+<pre class="r"><code>data[[v]]</code></pre>
+<pre><code>##   [1] plot-2  plot-2  plot-2  plot-2  plot-2  plot-2  plot-4  plot-6 
+##   [9] plot-6  plot-6  plot-8  plot-8  plot-8  plot-8  plot-8  plot-10
+##  [17] plot-10 plot-10 plot-10 plot-12 plot-12 plot-12 plot-12 plot-12
+##  [25] plot-14 plot-14 plot-14 plot-14 plot-14 plot-16 plot-16 plot-16
+##  [33] plot-16 plot-16 plot-16 plot-16 plot-18 plot-18 plot-18 plot-18
+##  [41] plot-18 plot-18 plot-20 plot-20 plot-20 plot-20 plot-20 plot-20
+##  [49] plot-20 plot-20 plot-22 plot-22 plot-24 plot-24 plot-24 plot-24
+##  [57] plot-24 plot-24 plot-26 plot-26 plot-26 plot-26 plot-26 plot-26
+##  [65] plot-28 plot-28 plot-28 plot-28 plot-28 plot-28 plot-30 plot-30
+##  [73] plot-30 plot-30 plot-30 plot-30 plot-30 plot-32 plot-32 plot-32
+##  [81] plot-34 plot-34 plot-34 plot-34 plot-36 plot-36 plot-36 plot-36
+##  [89] plot-36 plot-36 plot-36 plot-38 plot-38 plot-38 plot-38 plot-38
+##  [97] plot-40 plot-40 plot-40 plot-40 plot-40 plot-40 plot-40 plot-40
+## [105] plot-40 plot-42 plot-42 plot-44 plot-44 plot-44 plot-44 plot-44
+## [113] plot-44 plot-46 plot-46 plot-46 plot-46 plot-46 plot-46 plot-46
+## [121] plot-48 plot-48 plot-48 plot-48 plot-48 plot-48 plot-50 plot-50
+## [129] plot-50 plot-50 plot-50 plot-50 plot-50 plot-50 plot-52 plot-52
+## [137] plot-52 plot-52 plot-52 plot-52 plot-52 plot-54 plot-54 plot-54
+## [145] plot-54 plot-54 plot-54 plot-54 plot-56 plot-56 plot-56 plot-56
+## [153] plot-56 plot-56 plot-58 plot-58 plot-58 plot-58 plot-58 plot-58
+## [161] plot-58 plot-60 plot-60 plot-60 plot-60 plot-60 plot-60 plot-60
+## [169] plot-60
+## 30 Levels: plot-10 plot-12 plot-14 plot-16 plot-18 plot-2 ... plot-8</code></pre>
+<p>but using the <code>$</code> notation won’t work as it will look for the column called <code>v</code>:</p>
+<p>It returns <code>NULL</code> to indicate that the column does not exist (confusingly, this value can be difficult to work with and give cryptic error messages. More confusingly, getting a nonexistant column with <code>[[</code> generates an error instead).</p>
+<p>Also, <code>data$P</code> will “expand” to make <code>data$Plot</code>, but <code>data$S</code> will return <code>NULL</code> because that is ambiguous. Always use the full name!</p>
+<p>Single square brackets also index the data, but do so differently. This returns a <code>data.frame</code> with one column:</p>
+<pre class="r"><code>head(data[&quot;Plot&quot;])</code></pre>
+<pre><code>##     Plot
+## 1 plot-2
+## 2 plot-2
+## 3 plot-2
+## 4 plot-2
+## 5 plot-2
+## 6 plot-2</code></pre>
+<p>This returns a <code>data.frame</code> with two columns.</p>
+<pre class="r"><code>head(data[&quot;Plot&quot;,&quot;Weight&quot;])</code></pre>
+<pre><code>## [1] NA</code></pre>
+<p>(I’m just using <code>head</code> here to keep the output under control. If you actually wanted a <code>data.frame</code> like this you might do:</p>
+<pre class="r"><code>data.sub&lt;-data[c(&quot;Plot&quot;,&quot;Weight&quot;)]</code></pre>
+<p>and then continue to use the new data <code>data.sub</code>object).</p>
+<p>The difference between <code>[</code> and <code>[[</code> can be confusing.</p>
+<p>The best explanation I have seen is that imagine that the thing you are subsetting is a train with a bunch of carriages. <code>[x]</code> returns a new train with carriages represented by the variable x. So train[c(1,2)] returns a train with just the first two carriages, and train[1] returns a train with just the first c~arriage. The <code>[[</code> operator gets the contents of a single carriage. So <code>train[[1]]</code> gets the contents of the first carriage, and <code>train[[c(1,2)]]</code> doesn’t make any sense.</p>
+</div>
+<div id="rows-of-data.frames" class="section level3">
+<h3>Rows of data.frames</h3>
+<p>Extracting a row always retruns a new <code>data.frame</code></p>
+<pre class="r"><code>data[10,]</code></pre>
+<pre><code>##      Plot Seed.herbivore Root.herbivore No.stems Height Weight Seed.heads
+## 10 plot-6           TRUE           TRUE        1     33   2.58         43
+##    Seeds.in.25.heads
+## 10                 8</code></pre>
+<pre class="r"><code>data[10:20,]</code></pre>
+<pre><code>##       Plot Seed.herbivore Root.herbivore No.stems Height Weight Seed.heads
+## 10  plot-6           TRUE           TRUE        1     33   2.58         43
+## 11  plot-8          FALSE          FALSE        1     51   5.98        114
+## 12  plot-8          FALSE           TRUE        1     41   2.75         60
+## 13  plot-8          FALSE           TRUE        1     38   2.15         68
+## 14  plot-8          FALSE          FALSE        4     61  21.59        330
+## 15  plot-8          FALSE          FALSE        1     46   6.86        134
+## 16 plot-10           TRUE           TRUE        1     34   3.36         97
+## 17 plot-10           TRUE           TRUE        1     50  15.76        395
+## 18 plot-10           TRUE           TRUE        1     51   8.73        280
+## 19 plot-10           TRUE           TRUE        3     33   3.24         68
+## 20 plot-12          FALSE           TRUE        1     41   2.49         58
+##    Seeds.in.25.heads
+## 10                 8
+## 11                 5
+## 12                50
+## 13                52
+## 14                19
+## 15                40
+## 16                 9
+## 17                24
+## 18                11
+## 19                21
+## 20                11</code></pre>
+<pre class="r"><code>data[c(1,5,10),]</code></pre>
+<pre><code>##      Plot Seed.herbivore Root.herbivore No.stems Height Weight Seed.heads
+## 1  plot-2           TRUE           TRUE        1     31   4.16         83
+## 5  plot-2           TRUE          FALSE        1     47   6.17        212
+## 10 plot-6           TRUE           TRUE        1     33   2.58         43
+##    Seeds.in.25.heads
+## 1                  7
+## 5                  3
+## 10                 8</code></pre>
+</div>
+<div id="be-careful-with-indexing-by-location" class="section level3">
+<h3>Be careful with indexing by location</h3>
+<p>The above all index by name or by location (index). However, you generally want to avoid referencing by number in your saved code, e.g.:</p>
+<pre class="r"><code>data.height&lt;-data[[5]]</code></pre>
+<p>This is because if you change the order of your spreadsheet (add or delete a column), everything that depends on <code>data.height</code> may change. You may also see people do this in their code.</p>
+<pre class="r"><code>data.height&lt;-data[,5]</code></pre>
+<p>This should really be avoided. By name is much more robust and easy to read later on, even if it is more typing at first.</p>
+<pre class="r"><code>data.height&lt;-data$Height</code></pre>
+<pre class="r"><code>data.height&lt;-data[[&quot;height&quot;]]</code></pre>
+<p>When should you index by location?</p>
+<p>When you are computing the indices. As an example: suppose that you wanted every other row (perhaps you’re trying to generate a nonrandom some sample of data?) Remember <code>seq</code> from above? We can generate a sequence of integers 1, 3, ., up to the last (or second to last) row in our data set like this:</p>
+<pre class="r"><code>idx&lt;-seq(1,nrow(data),by=2)</code></pre>
+<p>Then subset like this:</p>
+<pre class="r"><code>data.oddrows&lt;-data[idx,]</code></pre>
+<p>Our new data set has half the rows of the old data set:</p>
+<pre class="r"><code>nrow(data.oddrows)</code></pre>
+<pre><code>## [1] 85</code></pre>
+<pre class="r"><code>nrow(data)</code></pre>
+<pre><code>## [1] 169</code></pre>
+<p>Because row names are preserved, you can see the odd numbers in the row names.</p>
+<pre class="r"><code>head(data.oddrows)</code></pre>
+<pre><code>##      Plot Seed.herbivore Root.herbivore No.stems Height Weight Seed.heads
+## 1  plot-2           TRUE           TRUE        1     31   4.16         83
+## 3  plot-2           TRUE           TRUE        1     42   3.51         72
+## 5  plot-2           TRUE          FALSE        1     47   6.17        212
+## 7  plot-4          FALSE           TRUE        3     57  23.44        522
+## 9  plot-6           TRUE           TRUE        1     40   4.01         81
+## 11 plot-8          FALSE          FALSE        1     51   5.98        114
+##    Seeds.in.25.heads
+## 1                  7
+## 3                 32
+## 5                  3
+## 7                  7
+## 9                 46
+## 11                 5</code></pre>
+</div>
+<div id="indexing-by-logical-vector" class="section level3">
+<h3>Indexing by logical vector</h3>
+<p>This is one of the most powerful ways of indexing.</p>
+<p>Remember our data mismatch:</p>
+<pre class="r"><code>data != data2</code></pre>
+<p>There is one entry in the <code>Height</code> row that disagrees. How can we extract the line that the mismatch is on?</p>
+<p>We could do it by index:</p>
+<pre class="r"><code>data[20,]</code></pre>
+<pre><code>##       Plot Seed.herbivore Root.herbivore No.stems Height Weight Seed.heads
+## 20 plot-12          FALSE           TRUE        1     41   2.49         58
+##    Seeds.in.25.heads
+## 20                11</code></pre>
+<pre class="r"><code>data2[20,]</code></pre>
+<pre><code>##       Plot Seed.herbivore Root.herbivore No.stems Height Weight Seed.heads
+## 20 plot-12          FALSE           TRUE        1   45.1   2.49         58
+##    Seeds.in.25.heads
+## 20                11</code></pre>
+<p>But that requires us to look for the error, note the row, write it down, etc. Boring, and computers are less error prone than humans. Plus, I just said that we should not do that.</p>
+<p>This is a logical vector that indicates where the entries in vector 1 disagree with vector 2:</p>
+<pre class="r"><code>data.differ&lt;-data$Height != data2$Height</code></pre>
+<p>We can index by this - it will return rows for which there are true values:</p>
+<pre class="r"><code>data[data.differ,]</code></pre>
+<pre class="r"><code>data2[data.differ,]</code></pre>
+<p>You can convert from a logical <code>(TRUE/FALSE)</code> vector to an integer vector with the <code>which</code> function:</p>
+<pre class="r"><code>which(data.differ)</code></pre>
+<pre><code>## [1] 20</code></pre>
+<p>This can be really useful.</p>
+</div>
+<div id="exercise-1" class="section level3">
+<h3>Exercise:</h3>
+<ol style="list-style-type: decimal">
+<li>Return all the rows in data where both data sets have the same value for Height.</li>
+<li>Return all the rows in data from plot-8</li>
+</ol>
+<p><strong>A solution</strong></p>
+<pre class="r"><code>data.same&lt;-data$Height == data2$Height</code></pre>
+<pre class="r"><code>data[data.same,]</code></pre>
+<p>or:</p>
+<pre class="r"><code>data[!data.differ,] #read &#39;!x&#39; as &quot;not x&quot;</code></pre>
+<p>read <code>!x</code> as “not x”,</p>
+<pre class="r"><code>data[data$Plot == &quot;plot-8&quot;,]</code></pre>
+<p>Subsetting can be useful when you want to look at bits of your data. For example, all the rows where the Height is at least 10 and there was no seed herbivore:</p>
+<pre class="r"><code>data[data$Height &gt; 10 &amp; data$Seed.herbivore,]</code></pre>
+<p>The <code>&amp;</code> operator here is a logical “and” (read <code>x &amp; y</code> as “x and y”):</p>
+<ul>
+<li><code>TRUE &amp; TRUE is TRUE</code></li>
+<li><p><code>TRUE &amp; FALSE is FALSE</code> +<code>FALSE &amp; TRUE is FALSE</code> +<code>FALSE &amp; FALSE is FALSE</code> In contrast, the <code>|</code> operator is a logical “or” (read as “or”)</p></li>
+<li><code>TRUE | TRUE is TRUE</code></li>
+<li><code>TRUE | FALSE is TRUE</code></li>
+<li><code>FALSE | TRUE is TRUE</code></li>
+<li><p><code>FALSE | FALSE is FALSE</code></p></li>
+</ul>
+<p>The other, less common, operator is the exclusive or:</p>
+<ul>
+<li><code>xor(TRUE, TRUE) is FALSE</code></li>
+<li><code>xor(TRUE, FALSE) is TRUE</code></li>
+<li><code>xor(FALSE, TRUE) is TRUE</code></li>
+<li><code>xor(FALSE, FALSE) is FALSE</code></li>
+</ul>
+<p>So you can do all sorts of crazy things like:</p>
+<pre class="r"><code>data[data$Plot == &quot;plot-2&quot; &amp; data$Seed.herbivore &amp; data$Root.herbivore,]</code></pre>
+<pre><code>##     Plot Seed.herbivore Root.herbivore No.stems Height Weight Seed.heads
+## 1 plot-2           TRUE           TRUE        1     31   4.16         83
+## 2 plot-2           TRUE           TRUE        3     41   5.82        175
+## 3 plot-2           TRUE           TRUE        1     42   3.51         72
+##   Seeds.in.25.heads
+## 1                 7
+## 2                 0
+## 3                32</code></pre>
+<p>and get all the cases in plot 2 where there were both seed herbivores and root herbivores. Or,</p>
+<pre class="r"><code>data[data$Height &gt; 75 &amp; (data$Seed.herbivore | data$Root.herbivore),]</code></pre>
+<pre><code>##        Plot Seed.herbivore Root.herbivore No.stems Height Weight
+## 31  plot-16          FALSE           TRUE        3     76  18.55
+## 42  plot-18           TRUE           TRUE        1     77  16.08
+## 73  plot-30           TRUE           TRUE        1     89  27.70
+## 111 plot-44          FALSE           TRUE        3     80  19.40
+## 112 plot-44          FALSE           TRUE        1     80  15.61
+## 115 plot-46           TRUE           TRUE        1     84  14.64
+## 127 plot-50           TRUE          FALSE        2     94  55.51
+## 131 plot-50           TRUE          FALSE        2     77  12.34
+## 134 plot-50           TRUE          FALSE        3     97  41.21
+## 137 plot-52          FALSE           TRUE        1     76  10.54
+## 147 plot-54           TRUE           TRUE        1     80  28.16
+## 155 plot-58           TRUE          FALSE        1     80  11.56
+##     Seed.heads Seeds.in.25.heads
+## 31         379                19
+## 42         261                27
+## 73         561                 3
+## 111        278                41
+## 112        255                 3
+## 115        288                34
+## 127        963                39
+## 131        182                49
+## 134        685                25
+## 137        231                35
+## 147        376                12
+## 155        220                20</code></pre>
+<p>and get all the plants that are quite tall in treatments with either a seed herbivore or a root herbivore (or both).</p>
+<p>You can build these up if you want:</p>
+<pre class="r"><code>idx.tall &lt;- data$Height &gt; 75</code></pre>
+<pre class="r"><code>idx.herbivore &lt;- data$Seed.herbivore | data$Root.herbivore</code></pre>
+<pre class="r"><code>idx.select &lt;- idx.tall &amp; idx.herbivore</code></pre>
+<pre class="r"><code>data[idx.select,]</code></pre>
+<pre><code>##        Plot Seed.herbivore Root.herbivore No.stems Height Weight
+## 31  plot-16          FALSE           TRUE        3     76  18.55
+## 42  plot-18           TRUE           TRUE        1     77  16.08
+## 73  plot-30           TRUE           TRUE        1     89  27.70
+## 111 plot-44          FALSE           TRUE        3     80  19.40
+## 112 plot-44          FALSE           TRUE        1     80  15.61
+## 115 plot-46           TRUE           TRUE        1     84  14.64
+## 127 plot-50           TRUE          FALSE        2     94  55.51
+## 131 plot-50           TRUE          FALSE        2     77  12.34
+## 134 plot-50           TRUE          FALSE        3     97  41.21
+## 137 plot-52          FALSE           TRUE        1     76  10.54
+## 147 plot-54           TRUE           TRUE        1     80  28.16
+## 155 plot-58           TRUE          FALSE        1     80  11.56
+##     Seed.heads Seeds.in.25.heads
+## 31         379                19
+## 42         261                27
+## 73         561                 3
+## 111        278                41
+## 112        255                 3
+## 115        288                34
+## 127        963                39
+## 131        182                49
+## 134        685                25
+## 137        231                35
+## 147        376                12
+## 155        220                20</code></pre>
+<p>whatever you find easiest to read and write.</p>
+<p><strong>Programs should be written for people to read, and only incidentally for machines to execute</strong> <em>(Structure and Interpretation of Computer Programs&quot; by Abelson and Sussman)</em></p>
+</div>
+<div id="the-subset-function-to-simplify-writing-complex-subsets" class="section level3">
+<h3>The subset function to simplify writing complex subsets</h3>
+<p>There is a function subset that may help you write complex subsets.</p>
+<pre class="r"><code>subset(data,Height &gt; 75 &amp; (Seed.herbivore | Root.herbivore))</code></pre>
+<pre><code>##        Plot Seed.herbivore Root.herbivore No.stems Height Weight
+## 31  plot-16          FALSE           TRUE        3     76  18.55
+## 42  plot-18           TRUE           TRUE        1     77  16.08
+## 73  plot-30           TRUE           TRUE        1     89  27.70
+## 111 plot-44          FALSE           TRUE        3     80  19.40
+## 112 plot-44          FALSE           TRUE        1     80  15.61
+## 115 plot-46           TRUE           TRUE        1     84  14.64
+## 127 plot-50           TRUE          FALSE        2     94  55.51
+## 131 plot-50           TRUE          FALSE        2     77  12.34
+## 134 plot-50           TRUE          FALSE        3     97  41.21
+## 137 plot-52          FALSE           TRUE        1     76  10.54
+## 147 plot-54           TRUE           TRUE        1     80  28.16
+## 155 plot-58           TRUE          FALSE        1     80  11.56
+##     Seed.heads Seeds.in.25.heads
+## 31         379                19
+## 42         261                27
+## 73         561                 3
+## 111        278                41
+## 112        255                 3
+## 115        288                34
+## 127        963                39
+## 131        182                49
+## 134        685                25
+## 137        231                35
+## 147        376                12
+## 155        220                20</code></pre>
+<p>This can help, especially interactively, but it can also bite you. It is not always obvious where the “value” of the variables in the second argument are coming from. For example:</p>
+<pre class="r"><code>subset(data,idx.tall &amp; (Seed.herbivore | Root.herbivore))</code></pre>
+<pre><code>##        Plot Seed.herbivore Root.herbivore No.stems Height Weight
+## 31  plot-16          FALSE           TRUE        3     76  18.55
+## 42  plot-18           TRUE           TRUE        1     77  16.08
+## 73  plot-30           TRUE           TRUE        1     89  27.70
+## 111 plot-44          FALSE           TRUE        3     80  19.40
+## 112 plot-44          FALSE           TRUE        1     80  15.61
+## 115 plot-46           TRUE           TRUE        1     84  14.64
+## 127 plot-50           TRUE          FALSE        2     94  55.51
+## 131 plot-50           TRUE          FALSE        2     77  12.34
+## 134 plot-50           TRUE          FALSE        3     97  41.21
+## 137 plot-52          FALSE           TRUE        1     76  10.54
+## 147 plot-54           TRUE           TRUE        1     80  28.16
+## 155 plot-58           TRUE          FALSE        1     80  11.56
+##     Seed.heads Seeds.in.25.heads
+## 31         379                19
+## 42         261                27
+## 73         561                 3
+## 111        278                41
+## 112        255                 3
+## 115        288                34
+## 127        963                39
+## 131        182                49
+## 134        685                25
+## 137        231                35
+## 147        376                12
+## 155        220                20</code></pre>
+<p>This works fine, because it found <code>idx.tall</code>. So when you read your code, you need to think carefully about which values are coming from the <code>data.frame</code> and which are coming from elsewhere.</p>
+<p>This is an unfortunate example of a function designed to be used by beginners, but it only really understandable once you understand more of what is going on. You’ll see it used widely, and it can simplify things. But be careful.</p>
+</div>
+<div id="adding-new-columns" class="section level3">
+<h3>Adding new columns</h3>
+<p>It is easy to add new columns, perhaps based on old ones:</p>
+<pre class="r"><code>data$small.plant &lt;- data$Height &lt; 50</code></pre>
+<pre class="r"><code>head(data)</code></pre>
+<pre><code>##     Plot Seed.herbivore Root.herbivore No.stems Height Weight Seed.heads
+## 1 plot-2           TRUE           TRUE        1     31   4.16         83
+## 2 plot-2           TRUE           TRUE        3     41   5.82        175
+## 3 plot-2           TRUE           TRUE        1     42   3.51         72
+## 4 plot-2           TRUE          FALSE        1     64   7.16        125
+## 5 plot-2           TRUE          FALSE        1     47   6.17        212
+## 6 plot-2           TRUE          FALSE        1     52   5.32        114
+##   Seeds.in.25.heads small.plant
+## 1                 7        TRUE
+## 2                 0        TRUE
+## 3                32        TRUE
+## 4                22       FALSE
+## 5                 3        TRUE
+## 6                19       FALSE</code></pre>
+<p>You can delete a column by setting it to <code>NULL</code>:</p>
+<pre class="r"><code>data$small.plant &lt;- NULL</code></pre>
+<pre class="r"><code>head(data)</code></pre>
+<pre><code>##     Plot Seed.herbivore Root.herbivore No.stems Height Weight Seed.heads
+## 1 plot-2           TRUE           TRUE        1     31   4.16         83
+## 2 plot-2           TRUE           TRUE        3     41   5.82        175
+## 3 plot-2           TRUE           TRUE        1     42   3.51         72
+## 4 plot-2           TRUE          FALSE        1     64   7.16        125
+## 5 plot-2           TRUE          FALSE        1     47   6.17        212
+## 6 plot-2           TRUE          FALSE        1     52   5.32        114
+##   Seeds.in.25.heads
+## 1                 7
+## 2                 0
+## 3                32
+## 4                22
+## 5                 3
+## 6                19</code></pre>
+<p>In this data set, the last column contains the number of seeds in 25 seed heads. However, there weren’t always 25 seed heads on a plant:</p>
+<pre class="r"><code>data[data$Seed.heads &lt; 25,]</code></pre>
+<pre><code>##        Plot Seed.herbivore Root.herbivore No.stems Height Weight
+## 55  plot-24          FALSE           TRUE        1     16   0.26
+## 85  plot-36          FALSE           TRUE        1     43   0.77
+## 107 plot-42           TRUE           TRUE        1     23   0.47
+##     Seed.heads Seeds.in.25.heads
+## 55           4                 1
+## 85          14                 4
+## 107          3                 0</code></pre>
+<p>In these three cases, the column contains the number of seeds over all seed heads.</p>
+<p><strong>Question</strong>: How do we compute the mean number of seeds per seed head?</p>
+<pre class="r"><code>data$Seeds.per.head &lt;- data$Seeds.in.25.heads /25</code></pre>
+<pre class="r"><code>idx.few.heads &lt;- data$Seed.heads &lt; 25</code></pre>
+<pre class="r"><code>data$Seeds.per.head[idx.few.heads] &lt;- data$Seeds.in.25.heads[idx.few.heads]/data$Seed.heads[idx.few.heads]</code></pre>
+<p>R generally offers several ways of doing things:</p>
+<pre class="r"><code>alternative &lt;- data$Seeds.in.25.heads / pmin(data$Seed.heads,25)</code></pre>
+<pre class="r"><code>alternative == data$Seeds.per.head</code></pre>
+<pre><code>##   [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+##  [15] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+##  [29] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+##  [43] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+##  [57] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+##  [71] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+##  [85] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+##  [99] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+## [113] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+## [127] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+## [141] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+## [155] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+## [169] TRUE</code></pre>
+<p>Use the <code>all</code> function to determine if all values are TRUE:</p>
+<pre class="r"><code>all(alternative == data$Seeds.per.head)</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+</div>
+<div id="bonus-topic-indexing-need-not-make-things-smaller" class="section level3">
+<h3>(bonus topic) Indexing need not make things smaller</h3>
+<p>Given this vector with the first give letters of the alphabet:</p>
+<pre class="r"><code>x &lt;- c(&quot;a&quot;,&quot;b&quot;,&quot;c&quot;,&quot;d&quot;,&quot;e&quot;)</code></pre>
+<p>Repeat the first letter once, the second letter twice, etc.</p>
+<pre class="r"><code>x[c(1,2,2,3,3,3,4,4,4,4,5,5,5,5,5)]</code></pre>
+<pre><code>##  [1] &quot;a&quot; &quot;b&quot; &quot;b&quot; &quot;c&quot; &quot;c&quot; &quot;c&quot; &quot;d&quot; &quot;d&quot; &quot;d&quot; &quot;d&quot; &quot;e&quot; &quot;e&quot; &quot;e&quot; &quot;e&quot; &quot;e&quot;</code></pre>
+<p>Much better!</p>
+<pre class="r"><code>x[rep(1:5,1:5)]</code></pre>
+<pre><code>##  [1] &quot;a&quot; &quot;b&quot; &quot;b&quot; &quot;c&quot; &quot;c&quot; &quot;c&quot; &quot;d&quot; &quot;d&quot; &quot;d&quot; &quot;d&quot; &quot;e&quot; &quot;e&quot; &quot;e&quot; &quot;e&quot; &quot;e&quot;</code></pre>
+<p><code>rep</code> is incredibly useful, and can be used in many ways. See the help page ?rep</p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
