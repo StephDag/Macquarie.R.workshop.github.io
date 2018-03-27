@@ -10,7 +10,6 @@ navbar:
     - text: "Getting started with R"
       href: Day1_1.2.Getting_Started.html
     - text: "Data types and Structures"
-      #icon: fa-gear
       href: Day1_2.1.Data_Types_and_Structures
     - text: "Understanding factors"
       href: Day1_2.2.Understanding_factors.html
