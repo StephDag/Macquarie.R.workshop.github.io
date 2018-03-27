@@ -7,7 +7,7 @@ navbar:
       href: index.html
     - text: "Day 1"
       icon: fa-gear
-      href: Day1_11_PreliminariesSoftwareInstallationcopie.html
+      href: Day1_1.1.Preliminaries_Software_installation.html
     - text: "About"
       href: About.html
 #output:
