@@ -7,9 +7,8 @@ navbar:
       href: index.html
     - text: "Day 1"
       icon: fa-gear
-        menu:
-        - text: "Test 1"
-          href: `Day1_1.1.Preliminaries&SoftwareInstallation.html`
+    - text: "Test 1"
+      href: `Day1_1.1.Preliminaries&SoftwareInstallation.html`
 #        - text: "1.1. Preliminaries & Software Installation"
  #         href: `Day1_1.1.Preliminaries&SoftwareInstallation.html`
  #       - text: "1.2. Getting started"
